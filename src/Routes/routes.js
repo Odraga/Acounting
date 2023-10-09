@@ -1,4 +1,8 @@
 export const routes = {
   Home: { path: "/" },
-  AboutUs: { path: "/AboutUs" },
+  Currency: { path: "/Currency" },
+  Expenses: { path: "/Expenses" },
+  BankAccounts: { path: "/BankAccounts" },
+  Income: { path: "/Income" },
+  Configuration: { path: "/Configuration" },
 };
