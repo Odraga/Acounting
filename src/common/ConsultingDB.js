@@ -6,55 +6,67 @@ import { v4 as uuidv4 } from "uuid";
  *QUERIES
  */
 
-class DB {
-  constructor(table, body) {
-    this.table = table;
-    this.body = body;
-  }
-  async create() {
-    try {
-      this.body.id = uuidv4();
+export const Create = async (table, body) => {
+  try {
+    body.id = uuidv4();
 
-      const request = await db.table(this.table).add(this.body);
+    const request = await db.table(table).add(body);
 
-      return request;
-    } catch (error) {
-      console.error("THAT'S A ERROR?", error);
-      return null;
-    }
+    return request;
+  } catch (error) {
+    console.error("THAT'S A ERROR?", error);
+    return [];
   }
-  read() {
-    try {
-      const request = useLiveQuery(() => db.table(this.table).toArray());
+};
 
-      return request;
-    } catch (error) {
-      console.error("THAT'S A ERROR?", error);
-      return null;
-    }
+export const useRead = (table, body, filter) => {
+  try {
+    let request = useLiveQuery(async () => {
+      if (!filter) {
+        console.log("ENTRo");
+        console.log(table);
+        return await db.table(table).toArray();
+      } else {
+        return db
+          .table(table)
+          .filter((item) => item.id === filter)
+          .toArray();
+      }
+    }, [table, body, filter]);
+    console.log(request);
+    return request;
+  } catch (error) {
+    console.error("THAT'S A ERROR?", error);
+    return [];
   }
-  async update() {
-    try {
-      const request = await db
-        .table(this.table)
-        .update(this.body.id, this.body);
+};
 
-      return request;
-    } catch (error) {
-      console.error("THAT'S A ERROR?", error);
-      return null;
-    }
-  }
-  async delete(id) {
-    try {
-      let request = await db.table(this.table).delete(id);
+export const Update = async (table, body) => {
+  try {
+    const request = await db.table(table).update(body.id, body);
 
-      return request;
-    } catch (error) {
-      console.error("THAT'S A ERROR?", error);
-      return null;
-    }
+    return request;
+  } catch (error) {
+    console.error("THAT'S A ERROR?", error);
+    return [];
   }
-}
+};
+
+export const Delete = async (table, body) => {
+  try {
+    console.log(table);
+    console.log(body);
+    let request = await db.table(table).delete(body);
+
+    return request;
+  } catch (error) {
+    console.error("THAT'S A ERROR?", error);
+    return [];
+  }
+};
+
+const DB = () => {
+  return;
+};
 
 export default DB;
