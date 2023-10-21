@@ -1,25 +1,22 @@
 import React, { useState } from "react";
 import ReactModal from "react-modal";
 import PropTypes from "prop-types";
-import DB from "../../../../common/ConsultingDB";
+import { Update, Create } from "../../../../common/ConsultingDB";
+import Modal from "../../../common/Modal";
 
 const AddEditCurrency = ({ show, toggle, model }) => {
-  const [name, setName] = useState(model ? model.name : "");
+  const [state, setState] = useState(
+    model ? { id: model.id, name: model.name } : { id: 0, name: "" }
+  );
 
   const save = async () => {
     try {
-      let body = model
-        ? model
-        : {
-            name: name,
-          };
+      console.log(model ? true : false);
+      let request = model
+        ? Update("currency", state)
+        : Create("currency", state);
 
-      let currency = new DB("currency", body);
-
-      body.name = name;
-      console.log(body);
-
-      let request = model ? await currency.update() : await currency.create();
+      console.log(request);
 
       if (request) {
         toggle();
@@ -30,28 +27,39 @@ const AddEditCurrency = ({ show, toggle, model }) => {
   };
 
   return (
-    <ReactModal
-      isOpen={show}
-      /*  onAfterOpen={afterOpenModal} */
-      onRequestClose={toggle}
-      /* style={customStyles} */
-      contentLabel="Example Modal"
-      ariaHideApp={false}
-    >
-      <button onClick={toggle}>Close</button>
-      <h2>ADD/EDIT CURRENCY</h2>
-      Name:
-      <br />
-      <input
-        type="text"
-        value={name}
-        onChange={(ev) => setName(ev.target.value)}
-      />
-      <br />
-      {!name ? <span>Por favor, escriba un nombre!</span> : null}
-      <br />
-      {name ? <button onClick={save}>Add</button> : null}
-    </ReactModal>
+    <>
+      <Modal show={show} onHide={toggle} className={"z-100"}>
+        <Modal.Header onButtonClose>
+          <Modal.Title>ADD/EDIT CURRENCY</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className={"align-items-center justify-content-center"}>
+          <div>
+            Name:
+            <br />
+            <input
+              type="text"
+              value={state.name}
+              onChange={(ev) => setState({ ...state, name: ev.target.value })}
+            />
+            <br />
+            {!state.name ? <span>Por favor, escriba un nombre!</span> : null}
+            <br />
+          </div>
+        </Modal.Body>
+        <Modal.Footer className={"justify-content-end align-items-center"}>
+          <div className="me-4">
+            {model ? (
+              state.name ? (
+                <button onClick={save}>Update</button>
+              ) : null
+            ) : state.name ? (
+              <button onClick={save}>Add</button>
+            ) : null}
+          </div>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
 
