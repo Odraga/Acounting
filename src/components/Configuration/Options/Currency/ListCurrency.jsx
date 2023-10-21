@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import ReactModal from "react-modal";
-import DB from "../../../../common/ConsultingDB";
+import { useRead, Delete } from "../../../../common/ConsultingDB";
 import AddEditCurrency from "./AddEditCurrency";
 import { confirmAlert } from "react-confirm-alert";
+import Modal from "../../../common/Modal";
 const ListCurrency = ({ show, toggle }) => {
   const [showAddEdit, setShowAddEdit] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
-  const currency = new DB("currency");
+  const currency = useRead("currency");
 
   const toggleAddEdit = (obj) => {
     setShowAddEdit(!showAddEdit);
     setSelectedItem(obj);
     console.log("VALOR", obj);
   };
-  const deleteConfirm = async (obj) => {
-    /*  let result = */
-
+  const deleteConfirm = async (table, obj) => {
     confirmAlert({
       title: "Confirm",
       message: "Seguro desea eliminar a " + obj.name + "?",
@@ -25,7 +23,7 @@ const ListCurrency = ({ show, toggle }) => {
         {
           label: "Sí",
           onClick: async () => {
-            await currency.delete(obj.id);
+            await Delete(table, obj.id);
           },
         },
         {
@@ -33,6 +31,28 @@ const ListCurrency = ({ show, toggle }) => {
         },
       ],
     });
+  };
+
+  const request = () => {
+    if (currency) {
+      return currency.map((currency, index) => (
+        <div
+          key={currency.id}
+          className="row mb-2 mx-2 rounded-10 bgc-secondary"
+        >
+          <div className="col-1 text-center">{index + 1}</div>
+          <div className="col-8">{currency.name}</div>
+          <div className="col-3">
+            <button className="me-1" onClick={() => toggleAddEdit(currency)}>
+              EDIT
+            </button>
+            <button onClick={() => deleteConfirm("currency", currency)}>
+              DELETE
+            </button>
+          </div>
+        </div>
+      ));
+    }
   };
 
   return (
@@ -44,48 +64,20 @@ const ListCurrency = ({ show, toggle }) => {
           model={selectedItem}
         />
       ) : null}
-      <ReactModal
-        isOpen={show}
-        onRequestClose={toggle}
-        contentLabel="Example Modal"
-        ariaHideApp={false}
-      >
-        <div className="d-flex w-100">
-          <div className="row">
-            <div className="col-11">
-              <h2>LIST CURRENCY</h2>
-            </div>
-            <div className="col-1">
-              <button onClick={toggle} className="me-2">
-                Close
-              </button>
-            </div>
+
+      <Modal show={show} onHide={toggle}>
+        <Modal.Header onButtonClose>
+          <Modal.Title>LIST CURRENCY</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="w-100 m-2">{request()}</div>
+        </Modal.Body>
+        <Modal.Footer className={"justify-content-end align-items-center"}>
+          <div className="me-4">
+            <button onClick={() => toggleAddEdit()}>New Currency</button>
           </div>
-        </div>
-        <div className="d-flex h-75">
-          <div>
-            {currency.read()?.map((currency, index) => (
-              <div
-                key={currency.id}
-                className="row mb-2 rounded-10 bgc-secondary"
-              >
-                {console.log(currency)}
-                <div className="col-1 text-center">{index + 1}</div>
-                <div className="col-8">{currency.name}</div>
-                <div className="col-3">
-                  <button onClick={() => toggleAddEdit(currency)}>EDIT</button>
-                  <button onClick={() => deleteConfirm(currency)}>
-                    DELETE
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="d-flex line-up p-2">
-          <button onClick={() => toggleAddEdit()}>ADD</button>
-        </div>
-      </ReactModal>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
