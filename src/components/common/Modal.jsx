@@ -2,7 +2,7 @@ import React, { Children } from "react";
 
 const Title = ({ children, className }) => {
   return (
-    <div className={`d-flex align-items-center col-11 ms-3 ${className}`}>
+    <div className={`d-flex justify-content-center mt-3 ms-3 ${className}`}>
       <strong>{children}</strong>
     </div>
   );
@@ -11,10 +11,10 @@ const Title = ({ children, className }) => {
 const Header = ({ children, className, onHide, onButtonClose }) => {
   return (
     <>
-      <div className={`header row ${className}`}>
+      <div className={`header ${className}`}>
         {children}
         {onButtonClose ? (
-          <div className="d-flex align-items-center me-3">
+          <div className="d-flex align-items-center justify-content-end me-3">
             <button onClick={onHide}>Close</button>
           </div>
         ) : null}
@@ -23,11 +23,11 @@ const Header = ({ children, className, onHide, onButtonClose }) => {
   );
 };
 const Body = ({ children, className }) => {
-  return <div className={`body m-3 ${className}`}>{children}</div>;
+  return <div className={`d-flex body ${className}`}>{children}</div>;
 };
 
 const Footer = ({ children, className }) => {
-  return <div className={`footer ${className}`}>{children}</div>;
+  return <div className={`d-flex footer ${className}`}>{children}</div>;
 };
 
 const Modal = ({ children, className, show, onHide }) => {
@@ -41,7 +41,7 @@ const Modal = ({ children, className, show, onHide }) => {
     <>
       {show ? (
         <>
-          <div className="overlay"></div>
+          <div className="overlay" onClick={onHide}></div>
           <div className={`modal ${className}`}>{childrenWithProps}</div>
         </>
       ) : null}
