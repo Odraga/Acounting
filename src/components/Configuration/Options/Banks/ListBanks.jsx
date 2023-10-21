@@ -4,6 +4,7 @@ import ReactModal from "react-modal";
 import DB from "../../../../common/ConsultingDB";
 import AddEditBank from "./AddEditBank";
 import { confirmAlert } from "react-confirm-alert";
+import Modal from "../../../common/Modal";
 
 const ListBanks = ({ show, toggle }) => {
   const [showAddEdit, setShowAddEdit] = useState(false);
@@ -45,51 +46,32 @@ const ListBanks = ({ show, toggle }) => {
           model={selectedItem}
         />
       ) : null}
-      <ReactModal
-        isOpen={show}
-        /*  onAfterOpen={afterOpenModal} */
-        onRequestClose={toggle}
-        /* style={customStyles} */
-        contentLabel="Example Modal"
-        ariaHideApp={false}
-      >
-        <button onClick={toggle} className="me-2">
-          Close
-        </button>
-        <button onClick={() => toggleAddEdit()}>ADD</button>
-        <h2>LIST BANKS</h2>
-
-        <table
-          style={{ border: "1px solid black", borderCollapse: "collapse" }}
-        >
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid black" }}>#</th>
-              <th style={{ border: "1px solid black" }} className="px-2">
-                NAME
-              </th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
+      <Modal show={show} onHide={toggle}>
+        <Modal.Header onButtonClose>
+          <Modal.Title>LIST BANKS</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="w-100 m-2 overflow-auto">
             {banks.read()?.map((bank, index) => (
-              <tr key={bank.id}>
-                {console.log(bank)}
-                <td style={{ border: "1px solid black" }} className="px-2">
-                  {index + 1}
-                </td>
-                <td style={{ border: "1px solid black" }} className="px-2">
-                  {bank.name}
-                </td>
-                <td>
-                  <button onClick={() => toggleAddEdit(bank)}>EDIT</button>
+              <div key={bank.id} className="row mb-2 rounded-10 bgc-secondary">
+                <div className="col-1 text-center">{index + 1}</div>
+                <div className="col-8">{bank.name}</div>
+                <div className="col-3">
+                  <button className="me-1" onClick={() => toggleAddEdit(bank)}>
+                    EDIT
+                  </button>
                   <button onClick={() => deleteConfirm(bank)}>DELETE</button>
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </ReactModal>
+          </div>
+        </Modal.Body>
+        <Modal.Footer className={"justify-content-end align-items-center"}>
+          <div className="me-4">
+            <button onClick={() => toggleAddEdit()}>New Currency</button>
+          </div>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };
