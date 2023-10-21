@@ -7,18 +7,18 @@
 /*Modal*/
 .modal {
   position: absolute; /* Stay in place */
-  z-index: 100; /* Sit on top */
+  z-index: auto; /* Sit on top */
 
   border-radius: 5px;
-  width: 75%;
+  width: 50%;
   height: 75%;
   /* overflow: auto; */
-  background-color: rgba(255, 255, 255, 0.9); /* Fallback color */
+  background-color: rgba(255, 255, 255, 1); /* Fallback color */
 }
 
 .overlay {
   position: fixed; /* Fixed/sticky position */
-  z-index: 99; /* Sit on top */
+  z-index: auto; /* Sit on top */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -28,26 +28,23 @@
 }
 
 .modal .header {
-  height: 15%;
-
   border: 1px solid rgba(128, 128, 128, 0.5);
   border-top: 0;
   border-left: 0;
   border-right: 0;
-
+  height: 10%;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
   background-color: rgb(255, 254, 251);
 }
 
 .modal .body {
-  height: 60%;
+  height: 80%;
   background-color: rgb(255, 254, 251);
 }
 
 .modal .footer {
-  height: 14.8%;
-
+  height: 10%;
   border: 1px solid rgba(128, 128, 128, 0.5);
   border-bottom: 0;
   border-left: 0;
@@ -543,6 +540,9 @@
   .justify-content-center {
     justify-content: center;
   }
+  .justify-content-end {
+    justify-content: end;
+  }
   /*END JUSTIFY*/
 
   /*ALIGN*/
@@ -679,47 +679,68 @@
 
   /*GRID*/
   .row {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
   }
+
+  /* Clases Col */
   .col-auto {
-    grid-column: auto / span;
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
   }
+
   .col-1 {
-    grid-column: auto / span 1;
+    flex: 0 0 auto;
+    width: 8.33%;
   }
   .col-2 {
-    grid-column: auto / span 2;
+    flex: 0 0 auto;
+    width: 16.66%;
   }
   .col-3 {
-    grid-column: auto / span 3;
+    flex: 0 0 auto;
+    width: 25%;
   }
   .col-4 {
-    grid-column: auto / span 4;
+    flex: 0 0 auto;
+    width: 33.33%;
   }
   .col-5 {
-    grid-column: auto / span 5;
+    flex: 0 0 auto;
+    width: 41.66%;
   }
   .col-6 {
-    grid-column: auto / span 6;
+    flex: 0 0 auto;
+    width: 50%;
   }
   .col-7 {
-    grid-column: auto / span 7;
+    flex: 0 0 auto;
+    width: 58.33%;
   }
   .col-8 {
-    grid-column: auto / span 8;
+    flex: 0 0 auto;
+    width: 66.66%;
   }
   .col-9 {
-    grid-column: auto / span 9;
+    flex: 0 0 auto;
+    width: 75%;
   }
   .col-10 {
-    grid-column: auto / span 10;
+    flex: 0 0 auto;
+    width: 83.33%;
   }
   .col-11 {
-    grid-column: auto / span 11;
+    flex: 0 0 auto;
+    width: 91.66%;
   }
   .col-12 {
-    grid-column: auto / span 12;
+    flex: 0 0 auto;
+    width: 100%;
   }
   /*END GRID*/
 }
